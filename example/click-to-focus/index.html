@@ -28,9 +28,9 @@
           const cameraPosition = Graph.cameraPosition()
           const vecToNodeData = [ cameraPosition.x - node.x, cameraPosition.y - node.y, cameraPosition.z - node.z ];
           let vecToNode = new THREE.Vector3(...vecToNodeData);
-          // normalize this vector
+          // normalize this vector (0 to 1)
           vecToNode.normalize();
-          // scalar multiply by distance
+          // scalar multiply to arrive at a distance
           vecToNode.multiplyScalar( distance );
           // add node to vector
           // vecToNode.add( node.x, node.y, node.z );
