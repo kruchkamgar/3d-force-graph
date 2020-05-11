@@ -1,8 +1,9 @@
 <head>
   <style> body { margin: 0; } </style>
 
-  <script src="//unpkg.com/3d-force-graph"></script>
-  <!--<script src="../../dist/3d-force-graph.js"></script>-->
+  <script src="/node_modules/three/build/three.js"></script>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+  <!-- <script src="../../src/3d-force-graph.js"></script> -->
 </head>
 
 <body>
@@ -13,7 +14,7 @@
 
     const Graph = ForceGraph3D()
       (elem)
-        .jsonUrl('../datasets/miserables.json')
+        .jsonUrl('./datasets/miserables.json')
         .nodeLabel('id')
         .nodeAutoColorBy('group')
         .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
@@ -22,18 +23,33 @@
           const distance = 40;
           // const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
 
-          // make vector between nodes, by feeding new Vector() with result of:
-            // take camera position
-            // subtract node postion
+        // make vector between nodes, by feeding new Vector() with result of:
+          // take camera position; subtract node postion
+          const cameraPosition = Graph.cameraPosition()
+          const vecToNodeData = [ cameraPosition.x - node.x, cameraPosition.y - node.y, cameraPosition.z - node.z ];
+          let vecToNode = new THREE.Vector3(...vecToNodeData);
           // normalize this vector
+          vecToNode.normalize();
           // scalar multiply by distance
+          vecToNode.multiplyScalar( distance );
+          // add node to vector
+          // vecToNode.add( node.x, node.y, node.z );
+          const toPosition = { x: vecToNode.x + node.x,
+                               y: vecToNode.y + node.y,
+                               z: vecToNode.z + node.z }
           // move camera to this position
-
           Graph.cameraPosition(
-            { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-            node, // lookAt ({ x, y, z })
-            3000  // ms transition duration
+            // {x: vecToNode.x, y: vecToNode.y, z: vecToNode.z},
+            toPosition,
+            node,
+            3000
           );
+
+          // Graph.cameraPosition(
+          //   { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
+          //   node, // lookAt ({ x, y, z })
+          //   3000  // ms transition duration
+          // );
         });
   </script>
 </body>
