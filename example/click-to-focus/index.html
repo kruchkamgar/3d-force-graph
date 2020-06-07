@@ -27,8 +27,10 @@
     Graph.d3Force('z', d3.forceZ(d => {
       // console.log(d.z + d.group*10);
       // return d.z + d.group*50
-        return 0;
-      }).strength(0.1)
+        return d.group;
+      }).strength( d => {
+        // console.log(d.group/10);
+        return d.group/10; })
     );
 
     // function linkStrength(link) {
