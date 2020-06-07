@@ -72,6 +72,7 @@ const linkedFGProps = Object.assign(...[
 ].map(p => ({ [p]: bindFG.linkProp(p)})));
 const linkedFGMethods = Object.assign(...[
   'refresh',
+  'getGraphBbox',
   'd3Force',
   'd3ReheatSimulation',
   'emitParticle'
@@ -84,11 +85,12 @@ const linkedRenderObjsProps = Object.assign(...[
   'height',
   'backgroundColor',
   'showNavInfo',
-  'enablePointerInteraction',
-  'postProcessingComposer'
+  'enablePointerInteraction'
 ].map(p => ({ [p]: bindRenderObjs.linkProp(p)})));
 const linkedRenderObjsMethods = Object.assign(...[
-  'cameraPosition'
+  'cameraPosition',
+  'zoomToFit',
+  'postProcessingComposer'
 ].map(p => ({ [p]: bindRenderObjs.linkMethod(p)})));
 
 //

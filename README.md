@@ -30,6 +30,7 @@ Check out the examples:
 * [Click to focus on node](https://vasturiano.github.io/3d-force-graph/example/click-to-focus/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/click-to-focus/index.html))
 * [Click to expand/collapse nodes](https://vasturiano.github.io/3d-force-graph/example/expandable-nodes/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/expandable-nodes/index.html))
 * [Fix nodes after dragging](https://vasturiano.github.io/3d-force-graph/example/fix-dragged-nodes/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/fix-dragged-nodes/index.html))
+* [Fit graph to canvas](https://vasturiano.github.io/3d-force-graph/example/fit-to-canvas/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/fit-to-canvas/index.html))
 * [Highlight nodes/links](https://vasturiano.github.io/3d-force-graph/example/highlight/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/highlight/index.html))
 * [Multiple Node Selection](https://vasturiano.github.io/3d-force-graph/example/multi-selection/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/multi-selection/index.html))
 * [Dynamic data changes](https://vasturiano.github.io/3d-force-graph/example/dynamic/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/dynamic/index.html))
@@ -39,6 +40,7 @@ Check out the examples:
 * [Force-directed tree (DAG mode)](https://vasturiano.github.io/3d-force-graph/example/tree/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/tree/index.html))
 * [yarn.lock dependency graph (DAG mode)](https://vasturiano.github.io/3d-force-graph/example/dag-yarn/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/dag-yarn/index.html))
 * [Add external objects to scene](https://vasturiano.github.io/3d-force-graph/example/scene/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/scene/index.html))
+* [Bloom Post-Processing Effect](https://vasturiano.github.io/3d-force-graph/example/bloom-effect/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/bloom-effect/index.html))
 * [Pause / Resume animation](https://vasturiano.github.io/3d-force-graph/example/pause-resume/) ([source](https://github.com/vasturiano/3d-force-graph/blob/master/example/pause-resume/index.html))
 
 See also the [2D canvas version](https://github.com/vasturiano/force-graph), [VR version](https://github.com/vasturiano/3d-force-graph-vr) and [AR version](https://github.com/vasturiano/3d-force-graph-ar).
@@ -146,7 +148,8 @@ ForceGraph3d({ configOptions })(<domElement>)
 | <b>pauseAnimation</b>() | Pauses the rendering cycle of the component, effectively freezing the current view and cancelling all user interaction. This method can be used to save performance in circumstances when a static image is sufficient. | |
 | <b>resumeAnimation</b>() | Resumes the rendering cycle of the component, and re-enables the user interaction. This method can be used together with `pauseAnimation` for performance optimization purposes. | |
 | <b>cameraPosition</b>([<i>{x,y,z}</i>], [<i>lookAt</i>], [<i>ms</i>]) | Getter/setter for the camera position, in terms of `x`, `y`, `z` coordinates. Each of the coordinates is optional, allowing for motion in just some dimensions. The optional second argument can be used to define the direction that the camera should aim at, in terms of an `{x,y,z}` point in the 3D space. The 3rd optional argument defines the duration of the transition (in ms) to animate the camera motion. A value of 0 (default) moves the camera immediately to the final position. | By default the camera will face the center of the graph at a `z` distance proportional to the amount of nodes in the system. |
-| <b>postProcessingComposer</b>([EffectComposer]) | Getter/setter for the ThreeJS [postprocessing composer](https://threejs.org/docs/#examples/en/postprocessing/EffectComposer). If an effect composer is defined, only the output of this composer is rendered, instead of the regular ThreeJS `renderer`. | `null` | 
+| <b>zoomToFit</b>([<i>ms</i>], [<i>px</i>]) | Automatically moves the camera so that all of the nodes become visible within its field of view, aiming at the graph center (0,0,0). It takes two optional arguments: the first defines the duration of the transition (in ms) to animate the camera motion (default: 0ms), and the second the amount of padding (in px) between the edge of the canvas and the outermost node location (default: 10px). | `(0, 10)` |
+| <b>postProcessingComposer</b>() | Access the [post-processing composer](https://threejs.org/docs/#examples/en/postprocessing/EffectComposer). Use this to add post-processing [rendering effects](https://github.com/mrdoob/three.js/tree/dev/examples/jsm/postprocessing) to the scene. By default the composer has a single pass ([RenderPass](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/RenderPass.js)) that directly renders the scene without any effects. || 
 | <b>scene</b>() | Access the internal ThreeJS [Scene](https://threejs.org/docs/#api/scenes/Scene). Can be used to extend the current scene with additional objects not related to 3d-force-graph. | |
 | <b>camera</b>() | Access the internal ThreeJS [Camera](https://threejs.org/docs/#api/cameras/PerspectiveCamera). | |
 | <b>renderer</b>() | Access the internal ThreeJS [WebGL renderer](https://threejs.org/docs/#api/renderers/WebGLRenderer). ||
@@ -195,6 +198,7 @@ ForceGraph3d({ configOptions })(<domElement>)
 
 | Method | Description |
 | --- | --- |
+| <b>getGraphBbox</b>() | Returns the current bounding box of all the nodes in the graph, formatted as `{ x: [<num>, <num>], y: [<num>, <num>], z: [<num>, <num>] }`. ||
 | <b>graph2ScreenCoords</b>(<i>x</i>, <i>y</i>, <i>z</i>) | Utility method to translate node coordinates to the viewport domain. Given a set of `x`,`y`,`z` graph coordinates, returns the current equivalent `{x, y}` in viewport coordinates. |
 
 ### Input JSON syntax
