@@ -1,9 +1,11 @@
+<html>
 <head>
   <style> body { margin: 0; } </style>
 
   <script src="/node_modules/three/build/three.js"></script>
   <script src="https://unpkg.com/d3-force-3d"></script>
   <script src="https://unpkg.com/3d-force-graph"></script>
+  <script src="../../src/lib/prep-graph-dataset.js"></script>
   <!-- <script src="../../src/3d-force-graph.js"></script> -->
 </head>
 
@@ -11,27 +13,29 @@
   <div id="3d-graph"></div>
 
   <script>
-    const elem = document.getElementById('3d-graph');
+    // https://stackoverflow.com/questions/16991341/json-parse-file-path
+    const request = new XMLHttpRequest();
+    request.open("GET", "../datasets/hierarchic-graph.json", false);
+    request.send(null)
+    const jsonFromFile = JSON.parse(request.responseText)[0];
+    const graphData = hierarchicToGraph(jsonFromFile);
 
+    const elem = document.getElementById('3d-graph');
     const Graph = ForceGraph3D()(elem);
+    //link strength: calc the intended distance instead of a strength?
+    // - no, because hard to do (performance issues?)
+    // - instead, let strengths act like 'charges' that self-organize using the physics engine
+
 
     // Graph.d3Force('center', d3.forceCenter()); // 0,0,0; ought set strength
-    Graph.d3Force('y', d3.forceY(d => {
-      // console.log(d.y + d.group*10);
-      return d.y + d.group*50 })
-    );
     Graph.d3Force('x', d3.forceX(d => {
       // console.log(d.x + d.group*10);
+      // d.parent.linkStrength () || d.cousin.linkStrength (less often have these, as likely they'd feature [connectively] in a Obj-subj scene: 'implicit' parents )
       return d.x + d.group*50 })
+
     );
-    Graph.d3Force('z', d3.forceZ(d => {
-      // console.log(d.z + d.group*10);
-      // return d.z + d.group*50
-        return d.group;
-      }).strength( d => {
-        // console.log(d.group/10);
-        return d.group/10; })
-    );
+    // Graph.d3Force('z', d3.forceZ(d => { return d.group; })
+      //.strength( d => { return d.group/10; }) );
 
     // function linkStrength(link) {
     //   return 1 / Math.min(count(link.source), count(link.target)); }
@@ -40,9 +44,10 @@
     // https://github.com/vasturiano/d3-force-3d#forceLink
 
     Graph
-      .jsonUrl('../datasets/miserables.json')
-      .nodeLabel('id')
-      .nodeAutoColorBy('group')
+      .graphData(graphData)
+      // .jsonUrl('../datasets/miserables.json')
+      // .nodeLabel('id')
+      // .nodeAutoColorBy('group')
       .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
       .onNodeClick(node => {
         // Aim at node from outside it
@@ -81,3 +86,4 @@
 
   </script>
 </body>
+</html>
