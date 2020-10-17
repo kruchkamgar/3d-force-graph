@@ -1,0 +1,146 @@
+{[
+
+{
+  "global comments": [
+    "# only create new node if it already does not exist",
+    "# algorithm to insert a 'deactivate' field into a link spanning multiple levels"
+  ]
+},
+{
+  "level": "6",
+  "name": "singing Dean Martin",
+  "value": "(pic)",
+  "children": [
+    {
+      "level": "x",
+      "name": "x",
+      "value": "(pic)",
+      "children": [{},]
+    },
+  ]
+},
+{
+  "level": "4",
+  "name": "golfing",
+  "id": "golfing_4_1",
+  "value": "(pic)",
+  "children": [
+    {
+      "level": "6",
+      "name": "kurosh smacks decent opener",
+      "value": "(pic)",
+      "children": [
+        {
+        "level": "7",
+        "name": "excessive practice swinging",
+        "value": "(pic)",
+        "children": []
+        },
+        {
+        "level": "8",
+        "name": "good lie outside green",
+        "value": "(pic)",
+        "children": []
+        }]
+    }]
+  },
+  {
+    "level": "4",
+    "name": "pre-golf gossip",
+    "value": "(pic)",
+    "setParent": "golfing_4_1",
+    "children": []
+  },
+  {
+    "level": "4",
+    "name": "gossip: how will kurosh do?",
+    "id": "how-will-kurosh-do_4_1",
+    "setParent": "pre--golf-gossip_1",
+    "value": "",
+    "children": [
+      {
+        "level": "6",
+        "name": "kurosh antics at the tee box",
+        "value": "",
+        "children": []
+      },
+      {
+        "level": "6",
+        "name": "kurosh hangs out of moving cart with beer in hand",
+        "value": "",
+        "children": []
+      }]
+  },
+  {
+    "level": "4",
+    "name": "Pete-- 'fails'",
+    "id": "Pete--_'fails'_1"
+    "value": "",
+    "children": []
+  },
+  {
+    "level": "4",
+    "name": "putting issues...",
+    "setParent": "Pete--_'fails'_1",
+    "children": [
+      {
+        "level": "5",
+        "name": "4-putts 2nd hole",
+        "value": "",
+        "children": []
+      }]
+  },
+  {
+    "level": "5",
+    "name": "Tom's short-game",
+    "id": "Tom's_short-game_1",
+    "children": []
+  },
+  {
+    "level": "5",
+    "name": "scramble for pars",
+    "setParent": "Tom's_short-game_1",
+    "children": [
+      {
+        "level": "6",
+        "name": "beautiful chip saves par!",
+        "value": "(video/gif)",
+        "children": []
+      },
+      {
+        "level": "6",
+        "name": "putting well",
+        "id": "putting_well_1",
+        "value": "(video/gif)",
+        "children": []
+      },
+      {
+        "level": "6",
+        "name": "sinks 10ft putt: drano",
+        "setParent": "putting_well_1",
+        "value": "(video/gif)",
+        "children": []
+      }]
+  },
+  {
+    "level": "5",
+    "name": "Equipment fails",
+    "setParent": "",
+    "children": []
+  },
+
+
+  {
+    "level": "",
+    "name": "",
+    "setParent": "",
+    "value": "(video/gif)",
+    "children": []
+  },
+  {
+  "level": "",
+  "name": "",
+  "id": "",
+  }
+
+]}
