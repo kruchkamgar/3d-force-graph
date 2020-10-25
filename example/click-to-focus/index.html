@@ -17,7 +17,7 @@
     const request = new XMLHttpRequest();
     request.open("GET", "../datasets/hierarchic-graph.json", false);
     request.send(null)
-    const jsonFromFile = JSON.parse(request.responseText)[0];
+    const jsonFromFile = JSON.parse(request.responseText).slice(1);
     const graphData = hierarchicToGraph(jsonFromFile);
 
     const elem = document.getElementById('3d-graph');
