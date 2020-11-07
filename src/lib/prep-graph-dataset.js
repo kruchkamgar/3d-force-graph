@@ -1,39 +1,44 @@
 const hierarchicToGraph = function (json){
-  const nodeList = {};
-  const nodeLinks = [];
-  // buildNodeArrays(json, nodeList, nodeLinks);
-  json.forEach( node => {
-    nodeList[node.id] = node;
-    if (node.children && node.children.length > 0) {
-      recurseChildren(node, nodeLinks, nodeList);
-    }
-  });
+  const nodeObj = {
+    "nodeList": {},
+    "descendants": []
+  }
+  // buildNodeArrays(json, nodeList, descendants);
 
-  const graphLinks = nodeLinks.map( link => {
-    debugger;
-    return link.map( relations => {
-      relations.children.map( child => {
-        return {source: relations.parent, target: child};
-      })
-    })
+  iterateChildren (json, nodeObj);
+  const graphLinks =
+  nodeObj.descendants.map( relations => {
+    return relations.children.map( child => {
+      return {
+        source: relations.parent,
+        target: child.id };
+    });
   }).flat();
 
   return {
-    'nodes': Object.entries(nodeList)
+    'nodes': Object.entries(nodeObj.nodeList)
               .map( objArray => objArray[1] ),
     'links': graphLinks
   }
 }
 
-function buildNodeArrays (json, nodeList, nodeLinks){}
-function recurseChildren(node, nodeLinks, nodeList) {
-  // json.forEach(node => {
-    nodeList[node.id] = node;
-    nodeLinks.push(
-      {parent: node.id, children: node.children} );
-    if (node.children && node.children.length > 0){
-      return recurseChildren(node.children, nodeLinks, nodeList)
-    } else {
-      return [nodeLinks, nodeList];
-    }
+function buildNodeArrays (json, nodeObj) {}
+function iterateChildren (jsonNodes, nodeObj) {
+  jsonNodes.forEach( node => {
+    ingestNode(node, nodeObj);
+  });
+}
+function ingestNode(node, nodeObj) {
+// json.forEach(node => {
+  nodeObj.nodeList[node.id] = node;
+  const children =
+    node.children && node.children.length > 0 ?
+      node.children : false;
+
+  nodeObj.descendants.push(
+    {parent: node.id, children: (node.children || []) } );
+  if (children){
+    iterateChildren(children, nodeObj)
   }
+  else { return true; }
+}
