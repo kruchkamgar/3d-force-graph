@@ -8,14 +8,9 @@
 {
   "level": "6",
   "name": "singing Dean Martin",
+  "id": "singing-Dean-Martin_6_1",
   "value": "(pic)",
   "children": [
-    {
-      "level": "x",
-      "name": "x",
-      "value": "(pic)",
-      "children": [{}]
-    }
   ]
 },
 {
@@ -27,25 +22,29 @@
     {
       "level": "6",
       "name": "kurosh smacks decent opener",
+      "id": "kurosh-smacks-decent-opener_6_1",
       "value": "(pic)",
       "children": [
         {
-        "level": "7",
-        "name": "excessive practice swinging",
-        "value": "(pic)",
-        "children": []
+          "level": "7",
+          "name": "excessive practice swinging",
+          "id": "excessive-practice-swinging_7_1",
+          "value": "(pic)",
+          "children": []
         },
         {
-        "level": "8",
-        "name": "good lie outside green",
-        "value": "(pic)",
-        "children": []
+          "level": "8",
+          "name": "good lie outside green",
+          "id": "good-lie-outside-green_8_1",
+          "value": "(pic)",
+          "children": []
         }]
     }]
   },
   {
     "level": "4",
     "name": "pre-golf gossip",
+    "id": "pre\\-golf-gossip_4_1",
     "value": "(pic)",
     "setParent": "golfing_4_1",
     "children": []
@@ -60,12 +59,14 @@
       {
         "level": "6",
         "name": "kurosh antics at the tee box",
+        "id": "kurosh-antics-at-the-tee-box_6_1",
         "value": "",
         "children": []
       },
       {
         "level": "6",
         "name": "kurosh hangs out of moving cart with beer in hand",
+        "id": "kurosh-hangs-out-of-moving-cart-with-beer-in-hand_6_1",
         "value": "",
         "children": []
       }]
@@ -73,18 +74,20 @@
   {
     "level": "4",
     "name": "Pete-- 'fails'",
-    "id": "Pete--_'fails'_1",
+    "id": "Pete\\-\\--'fails'_4_1",
     "value": "",
     "children": []
   },
   {
     "level": "4",
     "name": "putting issues...",
-    "setParent": "Pete--_'fails'_1",
+    "id": "putting-issues...4_1",
+    "setParent": "Pete\\-\\--'fails'_4_1",
     "children": [
       {
         "level": "5",
         "name": "4-putts 2nd hole",
+        "id": "4\\-putts-2nd-hold_5_1",
         "value": "",
         "children": []
       }]
@@ -92,30 +95,33 @@
   {
     "level": "5",
     "name": "Tom's short-game",
-    "id": "Tom's_short-game_1",
+    "id": "Tom's-short\\-game_5_1",
     "children": []
   },
   {
     "level": "5",
     "name": "scramble for pars",
-    "setParent": "Tom's_short-game_1",
+    "id": "scramble-for-pars_5_1",
+    "setParent": "Tom's-short\\-game_1",
     "children": [
       {
         "level": "6",
         "name": "beautiful chip saves par!",
+        "id": "beautiful-chip-saves-par!_6_1",
         "value": "(video/gif)",
         "children": []
       },
       {
         "level": "6",
         "name": "putting well",
-        "id": "putting_well_1",
+        "id": "putting-well_6_1",
         "value": "(video/gif)",
         "children": []
       },
       {
         "level": "6",
         "name": "sinks 10ft putt: drano",
+        "id": "sinks-10ft-putt:-drano_6_1",
         "setParent": "putting_well_1",
         "value": "(video/gif)",
         "children": []
@@ -124,6 +130,7 @@
   {
     "level": "5",
     "name": "Equipment fails",
+    "id": "Equipment-fails_5_1",
     "setParent": "",
     "children": []
   },
