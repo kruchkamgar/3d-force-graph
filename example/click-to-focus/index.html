@@ -21,30 +21,50 @@
     const graphData = hierarchicToGraph(jsonFromFile);
 
     const elem = document.getElementById('3d-graph');
-    const Graph = ForceGraph3D()(elem);
+    const Graph = ForceGraph3D()(elem)
+      .graphData(graphData);
     //link strength: calc the intended distance instead of a strength?
     // - no, because hard to do (performance issues?)
     // - instead, let strengths act like 'charges' that self-organize using the physics engine
 
+    // function setNodeId(node) {
+    //   return node.id; }
+    // Graph.d3Force('link')
+
+    debugger;
+
+    function linkStrength(link) {
+      return (1 / link.sourceLevel); }
+    // Graph.d3Force('link', d3.forceLink(graphData.links)
+    //   .id( (d,i) => setNodeId(d) )
+    //   .distance(200)
+    //   // .strength( d => linkStrength(d) )
+    // );
+
+// Graph.d3Force('link', )
 
     // Graph.d3Force('center', d3.forceCenter()); // 0,0,0; ought set strength
     Graph.d3Force('x', d3.forceX(d => {
       // console.log(d.x + d.group*10);
       // d.parent.linkStrength () || d.cousin.linkStrength (less often have these, as likely they'd feature [connectively] in a Obj-subj scene: 'implicit' parents )
-      return d.x + d.group*50 })
-
+      return d.x /* + d.group*50 */ }).strength( node => (
+        ( 1/
+          parseInt(node.level) )
+        ^ 2
+        / 3
+      ))
     );
     // Graph.d3Force('z', d3.forceZ(d => { return d.group; })
       //.strength( d => { return d.group/10; }) );
-
     // function linkStrength(link) {
-    //   return 1 / Math.min(count(link.source), count(link.target)); }
+      // return 1 / Math.min(count(link.source), count(link.target));
+    // }
     // override the link strength function
-    // Graph.d3Force('link').strength( d => d.force || linkStrength(d) );
+    // Graph.d3Force('link').strength( d => linkStrength(d) );
     // https://github.com/vasturiano/d3-force-3d#forceLink
 
+// function makeGraph (){} // call from async
     Graph
-      .graphData(graphData)
       // .jsonUrl('../datasets/miserables.json')
       // .nodeLabel('id')
       // .nodeAutoColorBy('group')
