@@ -6,18 +6,28 @@ const hierarchicToGraph = function (json){
   // buildNodeArrays(json, nodeList, descendants);
 
   iterateChildren (json, nodeObj);
+
+  const nodes = Object.entries(nodeObj.nodeList)
+    .map( objArray => objArray[1] );
+
   const graphLinks =
   nodeObj.descendants.map( relations => {
     return relations.children.map( child => {
       return {
-        source: relations.parent,
-        target: child.id };
+        source:
+          // nodes.findIndex(node => node.id ===
+            relations.parent
+          // )
+        , target:
+          // nodes.findIndex(node => node.id === 
+            child.id
+          // )
+        , sourceLevel: +child.level - 1 };
     });
   }).flat();
 
   return {
-    'nodes': Object.entries(nodeObj.nodeList)
-              .map( objArray => objArray[1] ),
+    'nodes': nodes,
     'links': graphLinks
   }
 }
@@ -38,6 +48,7 @@ function ingestNode(node, nodeObj) {
   nodeObj.descendants.push(
     {parent: node.id, children: (node.children || []) } );
   if (children){
+    // if stack-issues arise, queue this into an array of raw json node data
     iterateChildren(children, nodeObj)
   }
   else { return true; }
