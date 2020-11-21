@@ -18,8 +18,8 @@
         {id:"George"}
       ],
       links: [
-        {source: "Alice", target:"George"},
-        {source: "George", target:"Bob"}
+        {source: "Alice", target:"George", sourceLevel: 6},
+        {source: "George", target:"Bob", sourceLevel: 7}
       ]
     };
 
@@ -27,16 +27,44 @@
     const Graph = ForceGraph3D()(elem)
       .graphData(graphData);
 
-    function setNodeId(node) {
-      return node.id; }
+    const graphLinksSubset = graphData.links
+      .filter( link => link.sourceLevel === 6 );
+    const graphNodesSubset = graphLinksSubset
+      .map( link => {
+        return [
+          graphData.nodes
+            .find( node => node.id === link.source ),
+          graphData.nodes
+            .find( node => node.id === link.target )
+        ] }).flat();
+    const graphDataSubset = {
+      nodes: [...graphNodesSubset],
+      links: [...graphLinksSubset]
+    }
 
-    function linkStrength(link) {
-      return (1 / link.sourceLevel); }
-    Graph.d3Force('link', d3.forceLink(graphData)
-      .id( (d,i) => setNodeId(d) )
-      // .distance(200)
+    Graph.d3Force('link')
+      .links(graphDataSubset)
+      .distance( link=> {
+        return 200;
+      //   return link.sourceLevel === 6 ?
+      //     50 : 200
+      } )
+      .id( node => node.id )
       // .strength( d => linkStrength(d) )
-    );
+
+
+// SAME RESULT HERE--
+    // Graph.d3Force('link', d3.forceLink(graphDataSubset)
+    //   .links(graphDataSubset)
+    //   .distance( link=> {
+    //     return 200;
+    //     // return link.sourceLevel === 5 ?
+    //     //   50 : 200
+    //   } )
+    //   .id( node => node.id )
+    //   // .strength( d => linkStrength(d) )
+    // );
+
 
   </script>
 </body>
