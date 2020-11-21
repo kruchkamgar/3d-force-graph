@@ -2,107 +2,41 @@
 <head>
   <style> body { margin: 0; } </style>
 
-  <script src="/node_modules/three/build/three.js"></script>
+  <!-- <script src="https://unpkg.com/three"></script> -->
   <script src="https://unpkg.com/d3-force-3d"></script>
   <script src="https://unpkg.com/3d-force-graph"></script>
-  <script src="../../src/lib/prep-graph-dataset.js"></script>
-  <!-- <script src="../../src/3d-force-graph.js"></script> -->
 </head>
 
 <body>
   <div id="3d-graph"></div>
-
   <script>
-    // https://stackoverflow.com/questions/16991341/json-parse-file-path
-    const request = new XMLHttpRequest();
-    request.open("GET", "../datasets/hierarchic-graph.json", false);
-    request.send(null)
-    const jsonFromFile = JSON.parse(request.responseText).slice(1);
-    const graphData = hierarchicToGraph(jsonFromFile);
+
+    const graphData = {
+      nodes: [
+        {id:"Alice"},
+        {id:"Bob"},
+        {id:"George"}
+      ],
+      links: [
+        {source: "Alice", target:"George"},
+        {source: "George", target:"Bob"}
+      ]
+    };
 
     const elem = document.getElementById('3d-graph');
     const Graph = ForceGraph3D()(elem)
       .graphData(graphData);
-    //link strength: calc the intended distance instead of a strength?
-    // - no, because hard to do (performance issues?)
-    // - instead, let strengths act like 'charges' that self-organize using the physics engine
 
-    // function setNodeId(node) {
-    //   return node.id; }
-    // Graph.d3Force('link')
-
-    debugger;
+    function setNodeId(node) {
+      return node.id; }
 
     function linkStrength(link) {
       return (1 / link.sourceLevel); }
-    // Graph.d3Force('link', d3.forceLink(graphData.links)
-    //   .id( (d,i) => setNodeId(d) )
-    //   .distance(200)
-    //   // .strength( d => linkStrength(d) )
-    // );
-
-// Graph.d3Force('link', )
-
-    // Graph.d3Force('center', d3.forceCenter()); // 0,0,0; ought set strength
-    Graph.d3Force('x', d3.forceX(d => {
-      // console.log(d.x + d.group*10);
-      // d.parent.linkStrength () || d.cousin.linkStrength (less often have these, as likely they'd feature [connectively] in a Obj-subj scene: 'implicit' parents )
-      return d.x /* + d.group*50 */ }).strength( node => (
-        ( 1/
-          parseInt(node.level) )
-        ^ 2
-        / 3
-      ))
+    Graph.d3Force('link', d3.forceLink(graphData)
+      .id( (d,i) => setNodeId(d) )
+      // .distance(200)
+      // .strength( d => linkStrength(d) )
     );
-    // Graph.d3Force('z', d3.forceZ(d => { return d.group; })
-      //.strength( d => { return d.group/10; }) );
-    // function linkStrength(link) {
-      // return 1 / Math.min(count(link.source), count(link.target));
-    // }
-    // override the link strength function
-    // Graph.d3Force('link').strength( d => linkStrength(d) );
-    // https://github.com/vasturiano/d3-force-3d#forceLink
-
-// function makeGraph (){} // call from async
-    Graph
-      // .jsonUrl('../datasets/miserables.json')
-      // .nodeLabel('id')
-      // .nodeAutoColorBy('group')
-      .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
-      .onNodeClick(node => {
-        // Aim at node from outside it
-        const distance = 40;
-        // const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
-
-      // make vector between nodes, by feeding new Vector() with result of:
-        // take camera position; subtract node postion
-        const cameraPosition = Graph.cameraPosition()
-        const vecToNodeData = [ cameraPosition.x - node.x, cameraPosition.y - node.y, cameraPosition.z - node.z ];
-        let vecToNode = new THREE.Vector3(...vecToNodeData);
-        // normalize this vector (0 to 1)
-        vecToNode.normalize();
-        // scalar multiply to arrive at a distance
-        vecToNode.multiplyScalar( distance );
-        // add node to vector
-        // vecToNode.add( node.x, node.y, node.z );
-        const toPosition = { x: vecToNode.x + node.x,
-                             y: vecToNode.y + node.y,
-                             z: vecToNode.z + node.z }
-        // move camera to this position
-        Graph.cameraPosition(
-          // {x: vecToNode.x, y: vecToNode.y, z: vecToNode.z},
-          toPosition,
-          node,
-          3000
-        );
-
-        // Graph.cameraPosition(
-        //   { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-        //   node, // lookAt ({ x, y, z })
-        //   3000  // ms transition duration
-        // );
-      });
-
 
   </script>
 </body>
