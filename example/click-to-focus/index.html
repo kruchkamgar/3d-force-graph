@@ -27,19 +27,36 @@
     // - no, because hard to do (performance issues?)
     // - instead, let strengths act like 'charges' that self-organize using the physics engine
 
-    // function setNodeId(node) {
-    //   return node.id; }
+    function setNodeId(node) {
+      return node.id; }
     // Graph.d3Force('link')
-
-    debugger;
 
     function linkStrength(link) {
       return (1 / link.sourceLevel); }
-    // Graph.d3Force('link', d3.forceLink(graphData.links)
-    //   .id( (d,i) => setNodeId(d) )
-    //   .distance(200)
-    //   // .strength( d => linkStrength(d) )
-    // );
+    const graphLinksSubset = graphData.links
+      .filter( link => link.sourceLevel === 6 );
+    const graphNodesSubset = graphLinksSubset
+      .map( link => {
+        return [
+          graphData.nodes
+            .find( node => node.id === link.source ),
+          graphData.nodes
+            .find( node => node.id === link.target )
+        ] }).flat();
+    const graphDataSubset = {
+      nodes: [...graphNodesSubset],
+      links: [...graphLinksSubset]
+    }
+
+    Graph.d3Force('link', d3.forceLink(graphDataSubset)
+      .distance( link=> {
+        return 200;
+        // return link.sourceLevel === 5 ?
+        //   50 : 200
+      } )
+      .id( (d,i) => setNodeId(d) )
+      // .strength( d => linkStrength(d) )
+    );
 
 // Graph.d3Force('link', )
 
