@@ -21,7 +21,7 @@
     const graphData = hierarchicToGraph(jsonFromFile);
 
     const elem = document.getElementById('3d-graph');
-    const Graph = ForceGraph3D()(elem)
+    const Graph = ForceGraph3D({linkColor: 'red'})(elem)
       .graphData(graphData);
     //link strength: calc the intended distance instead of a strength?
     // - no, because hard to do (performance issues?)
@@ -48,29 +48,55 @@
       links: [...graphLinksSubset]
     }
 
-    Graph.d3Force('link', d3.forceLink(graphDataSubset)
-      .distance( link=> {
-        return 200;
-        // return link.sourceLevel === 5 ?
-        //   50 : 200
-      } )
-      .id( (d,i) => setNodeId(d) )
-      // .strength( d => linkStrength(d) )
-    );
-
-// Graph.d3Force('link', )
+    // Graph.d3Force('link', d3.forceLink(graphDataSubset)
+    //   .distance( link=> {
+    //     const power = 2
+    //     const calc = Math.pow(link.sourceLevel, power)
+    //     return calc
+    //   } )
+    //   .id( (d,i) => setNodeId(d) )
+    //   // .strength( d => linkStrength(d) )
+    // );
+    // Graph.d3Force('charge')
+    // .strength( node => {
+    //   // const calc = node.level === '8' ?
+    //   //   200 : 10;
+    //   const calc = Math.pow(2, node.level*0.75)
+    //   return -calc })
 
     // Graph.d3Force('center', d3.forceCenter()); // 0,0,0; ought set strength
-    Graph.d3Force('x', d3.forceX(d => {
-      // console.log(d.x + d.group*10);
-      // d.parent.linkStrength () || d.cousin.linkStrength (less often have these, as likely they'd feature [connectively] in a Obj-subj scene: 'implicit' parents )
-      return d.x /* + d.group*50 */ }).strength( node => (
-        ( 1/
-          parseInt(node.level) )
-        ^ 2
-        / 3
-      ))
-    );
+    const maxLevel = 8;
+    Graph.d3Force('y', d3.forceY( node => {
+      let calc1 = Math.pow(2, (1/ (node.level/5))*4) *10
+      const goldenRatio = (1 + Math.sqrt(5))/2;
+      const reversedLevel = maxLevel - node.level + 1
+      let calc = Math.pow(goldenRatio, reversedLevel) * 50
+      calc = calc < 2000 ?
+        calc : 2000
+      console.log("calc", calc)
+      return calc })
+      // .strength(node => {
+      //   const calc = Math.pow(2, node.level*0.75) * 0.002
+      //   console.log("strngth", calc)
+      //   return 0.05 })
+    )
+
+    Graph.d3Force('link')
+    .strength(link => {
+      const calc1 = Math.pow(3, link.sourceLevel/2) * 0.002;
+      return 0 })
+    // console.log(d.x + d.group*10);
+    // d.parent.linkStrength () || d.cousin.linkStrength (less often have these, as likely they'd feature [connectively] in a Obj-subj scene: 'implicit' parents )
+    // Graph.d3Force('x', d3.forceX(d => {
+    //   return d.x /* + d.group*50 */ })
+    //     .strength( node => {
+    //       const calc = Math.pow(
+    //         1/parseInt(node.level), 2)
+    //         / 3
+    //       // debugger;
+    //       return calc
+    //     })
+    // );
     // Graph.d3Force('z', d3.forceZ(d => { return d.group; })
       //.strength( d => { return d.group/10; }) );
     // function linkStrength(link) {
@@ -84,11 +110,17 @@
     Graph
       // .jsonUrl('../datasets/miserables.json')
       // .nodeLabel('id')
-      // .nodeAutoColorBy('group')
+      .nodeAutoColorBy('group')
+      .linkColor(link => {
+        const calc = link.sourceLevel === 5 ?
+          'rgba(255,0,0,1)' : 'rgba(255,255,255,1)'
+        return calc })
+      .linkWidth(link => 2)
+      // .nodeColor(node => 'rgba(255,0,0,1)')
       .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
       .onNodeClick(node => {
         // Aim at node from outside it
-        const distance = 40;
+        const cameraDistance = 40;
         // const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
 
       // make vector between nodes, by feeding new Vector() with result of:
@@ -99,7 +131,7 @@
         // normalize this vector (0 to 1)
         vecToNode.normalize();
         // scalar multiply to arrive at a distance
-        vecToNode.multiplyScalar( distance );
+        vecToNode.multiplyScalar( cameraDistance );
         // add node to vector
         // vecToNode.add( node.x, node.y, node.z );
         const toPosition = { x: vecToNode.x + node.x,
